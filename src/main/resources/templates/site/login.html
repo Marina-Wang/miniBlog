@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>登录页面</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <a th:href="@{/index}" class="navbar-brand">Mini Blog</a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <div class="navbar-nav">
+                <a th:href="@{/index}" class="nav-item nav-link">首页</a>
+                <a th:href="@{/register}" class="nav-item nav-link">注册</a>
+                <a th:href="@{/login}" class="nav-item nav-link active">登录</a>
+            </div>
+        </ul>
+        <form action="" class="form-inline my-2 my-md-0">
+            <input type="text" class="form-control mr-sm-2" placeholder="请输入关键字">
+            <button class="btn btn-outline-success my-2 my-md-0">搜索</button>
+        </form>
+    </div>
+</nav>
+
+<!-- 登录框 -->
+<div class="container"><br>
+    <form method="post" th:action="@{/login}" novalidate class="needs-validation">
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text"
+                   id="username" name="username" th:value="${user==null?'':user.username}"
+                   th:class="|form-control ${usernameMsg==null?'':'is-invalid'}|" placeholder="用户名">
+<!--            <div class="valid-feedback">用户名正确!</div>-->
+            <div class="invalid-feedback" th:if="${usernameMsg!=null}" th:utext="${usernameMsg}">用户名不正确!</div>
+
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password"
+                   id="password" name="password" th:value="${user==null?'':user.password}"
+                   th:class="|form-control ${passwordMsg==null?'':'is-invalid'}|" placeholder="密码">
+<!--            <div class="valid-feedback">密码正确!</div>-->
+            <div class="invalid-feedback" th:if="${passwordMsg!=null}" th:utext="${passwordMsg}">密码不正确!</div>
+        </div>
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="remember" name="remember">
+            <label class="custom-control-label" for="remember">记住我</label>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">登录</button>
+    </form>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+
+<!-- 页脚 -->
+<nav class="navbar navbar-dark bg-dark justify-content-between fixed-bottom" th:replace="index::footer">
+    <span class="navbar-text">
+        Best wishes to you !
+    </span>
+    <span class="navbar-text">
+        &copy; 2020 QiHang Hu <a href="https://github.com/A11Might/MiniBlog" title="主页">GitHub</a> - <a href="http://www.beian.miit.gov.cn/" title="信息产业部备案管理系统网址" target="_blank">陕ICP备19025889号</a>
+    </span>
+</nav>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

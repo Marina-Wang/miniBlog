@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xidian.miniblog.dao.PostMapper">
+
+    <sql id="selectFields">
+        id, user_id, content, status, create_time, comment_count, score
+    </sql>
+
+    <sql id="insertFields">
+        user_id, content, status, create_time, comment_count, score
+    </sql>
+
+    <update id="updateCommentCount">
+        update post
+        set comment_count = #{commentCount}
+        where id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        update post
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateScore">
+        update post
+        set score = #{score}
+        where id = #{id}
+    </update>
+
+    <select id="selectPostById" resultType="com.xidian.miniblog.entity.Post">
+        select <include refid="selectFields"></include>
+        from post
+        where status != 1
+        and id = #{id}
+    </select>
+
+    <select id="selectPostsByUserId" resultType="com.xidian.miniblog.entity.Post">
+        select <include refid="selectFields"></include>
+        from post
+        where status != 1
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        <if test="orderMode==0">
+            order by id desc
+        </if>
+        <if test="orderMode==1">
+            order by score desc, id desc
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectPostRowsByUserId" resultType="int">
+        select count(id)
+        from post
+        where status != 1
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+    </select>
+
+    <select id="selectPostsByUserIds" resultType="com.xidian.miniblog.entity.Post">
+        select <include refid="selectFields"></include>
+        from post
+        where status != 1
+        and user_id in
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectPostRowsByUserIds" resultType="java.lang.Integer">
+        select count(id)
+        from post
+        where status != 1
+        and user_id in
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+    <select id="selectCommentCount" resultType="java.lang.Integer">
+        select comment_count
+        from post
+        where id = #{id}
+    </select>
+
+    <insert id="insertPost" parameterType="com.xidian.miniblog.entity.Post" keyProperty="id">
+        insert into post(<include refid="insertFields"></include>)
+        values(#{userId},#{content},#{status},#{createTime},#{commentCount},#{score})
+    </insert>
+
+</mapper>
